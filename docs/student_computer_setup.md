@@ -1,4 +1,4 @@
-# Setting up your compter 
+# Setting up your computer 
 
 * Download latest version of python from `https://www.python.org/downloads/`
 
