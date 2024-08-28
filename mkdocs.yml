@@ -1,11 +1,20 @@
-site_name: "containers documentation" 
+site_name: "curiosityworks.org" 
 copyright: curiosityworks.org
-repo_url: https://github.com/curiosinauts/containers
+repo_url: https://github.com/curiosinauts/site
 edit_uri: edit/main/docs/
 site_dir: site
 
 nav:
   - "index.md"
+  - 'student_computer_setup.md'
+  # - Commands:
+  #   - get:
+  #     - 'commands/host/host-ip.md'
+  #     - 'commands/host/host-port.md'
+  #     - 'commands/get/build.md'
+  #     - 'commands/get/pybuild.md'
+    # - register:
+    #   - 'commands/service.md'
   # - Foo:
   #     - "foo/index.md"
 
