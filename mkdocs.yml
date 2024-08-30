@@ -1,12 +1,15 @@
-site_name: "curiosityworks.org" 
+site_name: "curiosityworks.org"
 copyright: curiosityworks.org
 repo_url: https://github.com/curiosinauts/site
 edit_uri: edit/main/docs/
 site_dir: site
 
 nav:
-  - "index.md"
+  - 'index.md'
   - 'student_computer_setup.md'
+  - 'vscode_over_web.md'
+  - Lessons:
+    - 'lessons/lesson1.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
