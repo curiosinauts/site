@@ -9,15 +9,15 @@ for i in range(30):
 Variable substitution
 ```
 sentence_mon  = "I will never win an enemy"
-sentence_tues = "I will be nince"
+sentence_tues = "I will be nice"
 ```
 
 Take an input instead of `hard code`
 ```
 sentence_mon  = "I will never win an enemy"
-sentence_tues = "I will be nince"
+sentence_tues = "I will be nice"
 
-repeat = input("how many time")
+repeat = input("how many times : ")
 
 for i in range(int(repeat)):
     print(sentence_mon)
