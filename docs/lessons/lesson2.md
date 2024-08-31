@@ -34,10 +34,11 @@ Input
 `how many $ would you like? :`
 
 Code
-Take an input from the terminal
-Using the code from above substitue 5 with the input value
-Make as many mistakes as you like
-Don't give up
+
+* Take an input from the terminal
+* Using the code from above substitue 5 with the input value
+* Make as many mistakes as you like
+* Don't give up
 
 Output
 $$$$$$
