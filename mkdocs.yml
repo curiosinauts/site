@@ -10,6 +10,7 @@ nav:
   - 'vscode_over_web.md'
   - Lessons:
     - 'lessons/lesson1.md'
+    - 'lessons/lesson2.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
