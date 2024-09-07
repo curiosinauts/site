@@ -42,7 +42,7 @@ Pseudo code
         print("*" * a)
     
     ```
-The followin line of the code from above shows code that has been commented out. That means it doesn't get executed when you click on run.
+The following line of the code from above shows code that has been commented out. That means it doesn't get executed when you click on run.
 ``` py
 # print(f"a = {a}, s = {s}")  #(1)
 ```
