@@ -13,6 +13,7 @@ nav:
     - 'lessons/lesson2.md'
     - 'lessons/lesson3.md'
     - 'lessons/lesson4.md'
+    - 'lessons/lesson5.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
