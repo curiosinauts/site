@@ -1,6 +1,6 @@
 # Lesson 5
 
-# REPL again and Modulo operator
+## REPL again and Modulo operator
 
 ``` bash
 # Practice using REPL
@@ -40,43 +40,6 @@ True
 
 Pseudo code
 ``` py
-# We iterate through 1 through 10
-
-# Check to see if current iteration value of i is even
-
-# Print value of i
-
-# Print "even" if the current value of i is even
-```
-
-=== "expected output 1"
-    ```
-    0
-    even
-    1
-    2
-    even
-    3
-    4
-    even
-    5
-    6
-    even
-    7
-    8
-    even
-    9
-    10
-    even
-    ```
-=== "code 1"
-    ``` py    
-    ```
-
-## Make it pretty
-
-Pseudo code
-``` py
 # Modify the code from above and make the output look easier to read
 
 # You may utilize f string from lesson 1
@@ -99,5 +62,16 @@ Pseudo code
     10 even
     ```
 === "code 1"
-    ``` py    
+    ``` py   
+    # We iterate through 0 through 10
+    for i in range(11):
+        # Print value of i
+        print(f"{i} ", end="")
+
+        # Check to see if current iteration value of i is even
+        if i % 2 == 0:
+            # Print "even" if the current value of i is even 
+            print("even")
+        else:
+            print("") 
     ```

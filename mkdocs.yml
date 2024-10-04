@@ -8,12 +8,15 @@ nav:
   - 'index.md'
   - 'student_computer_setup.md'
   - 'vscode_over_web.md'
-  - Lessons:
-    - 'lessons/lesson1.md'
-    - 'lessons/lesson2.md'
-    - 'lessons/lesson3.md'
-    - 'lessons/lesson4.md'
-    - 'lessons/lesson5.md'
+  - 'Senior Lessons':
+    - 'senior/lesson1.md'
+    - 'senior/lesson2.md'
+    - 'senior/lesson3.md'
+    - 'senior/lesson4.md'
+    - 'senior/lesson5.md'
+    - 'senior/lesson6.md'
+  - 'Junior Lessons':
+    - 'junior/lesson5.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
