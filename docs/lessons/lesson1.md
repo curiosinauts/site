@@ -85,3 +85,14 @@ second_number = input("second number?")
 # we have to convert string to integer
 print(int(first_number) + int(second_number))
 ```
+
+## Type conversion
+
+To the computer, `"2"` and `2` are different things: `"2"` is a string (text that happens to look like a number), while `2` is an integer it can do math with. `int()` converts a string into a real integer — this is called **type conversion** (or *casting*). Since `input()` always returns a string, we convert before adding:
+
+```python
+print(2 + 2)      # integers => math      => 4
+print("2" + "2")  # strings  => glue them => 22
+```
+
+Try removing the `int()` calls and entering `2` and `2`. You'll get `22` — string gluing, not addition. Same `+`, different types, different behavior.

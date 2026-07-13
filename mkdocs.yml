@@ -9,7 +9,10 @@ nav:
   - 'student_computer_setup.md'
   - 'vscode_over_web.md'
   - 'Lessons':
-    - 'lessons/lesson1.md'
+    - 'Lesson 1':
+      - 'lessons/lesson1.md'
+      - 'Lesson 1 reading': 'lessons/lesson1_reading.md'
+      - 'Lesson 1 homework': 'lessons/lesson1_homework.md'
     - 'lessons/lesson2.md'
     - 'lessons/lesson3.md'
     - 'lessons/lesson4.md'
