@@ -13,7 +13,10 @@ nav:
       - 'lessons/lesson1.md'
       - 'Lesson 1 reading': 'lessons/lesson1_reading.md'
       - 'Lesson 1 homework': 'lessons/lesson1_homework.md'
-    - 'lessons/lesson2.md'
+    - 'Lesson 2':
+      - 'lessons/lesson2.md'
+      - 'Lesson 2 reading': 'lessons/lesson2_reading.md'
+      - 'Lesson 2 homework': 'lessons/lesson2_homework.md'
     - 'lessons/lesson3.md'
     - 'lessons/lesson4.md'
     - 'lessons/lesson5.md'
