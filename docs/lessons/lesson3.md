@@ -1,79 +1,182 @@
-# Lesson 3 
-We will learn for-loop
+# Lesson 3
+
+Remember the feeling from the homework — copy-pasting the prime-check block for the twelfth time, thinking *there has to be a smarter way*? Today we learn it. And we learn something bigger: how programmers **think before they type**.
 
 ## Answer to lesson 2 homework
-``` py 
-repeat = input("how many $ would you like? : ") #(1)
 
-print("$" * int(repeat))                        #(2)
+The homework gave you a block that checks **one** number, and the plain way to check every number from 2 to 15 was to paste it fourteen times, editing `number = ...` each time. Here is the smarter way:
+
+```python
+for number in range(2, 16):
+    is_prime = True
+    for divisor in range(2, number):
+        if number % divisor == 0:
+            is_prime = False
+    if is_prime:
+        print(number)
 ```
-
-1.  python function `input` returns the value you enter on the terminal
-2.  keyword `int` converts data type [string](../lesson1#variables) to data type int
-
-Ouput
-``` bash
-> how many $ would like : 6
-$$$$$$
-
-```
-
-## Breakdown of for-loop
-Code
-``` py
-for i in range(10)          # (1)
-    print(i)
-```
-
-1.  i is a variable of type int. you can name it anyway you like.
 
 Output
-``` bash
-0
-1
+
+```
 2
 3
-4
 5
-6
 7
-8
-9
+11
+13
 ```
 
-## Lab 1 - triagle
-Use for loop and int keyword and python expression for printing * symbol six times e.g. `"*" * 6`
+Look closely — the inside of that loop **is your homework block**, unchanged except for one thing: the line `number = 9` is gone, because the outer loop now sets `number` for us. First it runs the whole block with `number = 2`, then with `number = 3`, and so on up to 15. The copy-pasting still happens — the computer just does it for us.
 
-=== "expected output 1"
-    ```
-    *
-    **
-    ***
-    ****
-    *****
-    ```
+A loop with another loop inside it is called a **nested loop**. The outer loop picks which number we are on; the inner loop does the divisor-checking work for that number.
 
-=== "code 1"
-    ``` py
-    for i in range(6)
-        print("*" * i)
-    ```
+(Small detail: `range(2, 16)` stops at 15, not 16 — just like `range(10)` stops at 9. The end is always one short.)
 
-## Lab 2 - reversed triagle
+## Think in English first
 
-=== "expected output 2"
-    ```
-    *****
-    ****
-    ***
-    **
-    *
-    ```
+You speak English. Python is a foreign language — like French. When you want to say something in French, you don't *think* in French; you think in English and then translate. Programmers work the same way: **plan in English first, then translate to Python.**
 
-=== "code 2"
-    ``` py
-    j = 5
-    for i in range(5)
-        x = j - i
-        print("*" * x)
-    ```
+The English plan is called **pseudocode**, and it lives in comments — lines starting with `#`, which Python ignores completely. They are for humans only.
+
+Today's goal: print this triangle.
+
+```
+*
+**
+***
+****
+*****
+******
+*******
+********
+*********
+**********
+```
+
+Before any Python, describe it in English. Look at the picture: row 1 has one star, row 2 has two stars... row 10 has ten. The row number *is* the star count. So the plan:
+
+```python
+# for each row number from 1 to 10
+#     print a row of stars: as many stars as the row number, all on one line
+#     go to the next line
+```
+
+Python cannot run this — but **you** can. Run it in your head: row 1, print one star, next line; row 2, print two stars, next line... Yes, that draws the triangle. We checked the plan was right *before* writing a single line of Python. That is the whole point of pseudocode.
+
+## Translating — and one missing word
+
+Now translate line by line. Line 1 we know from the prime program:
+
+```python
+# for each row number from 1 to 10
+for row_num in range(1, 11):
+```
+
+Line 2 says "as many stars as the row number" — repeating something `row_num` times is a loop:
+
+```python
+    # print a row of stars: as many stars as the row number, all on one line
+    for j in range(row_num):
+        print("*")
+```
+
+But "all on one line" — there we are stuck. Watch what `print` does:
+
+```python
+print("*")
+print("*")
+print("*")
+```
+
+```
+*
+*
+*
+```
+
+Three lines. `print` secretly adds an invisible character after every call: the **newline**, which pushes the cursor down. It is like a word we don't know how to say in French yet. Here is the word — the ending character is called `end`, and we can change it:
+
+```python
+print("*", end="")
+print("*", end="")
+print("*", end="")
+```
+
+```
+***
+```
+
+With `end=""` the newline is replaced by nothing, so the stars land side by side. And the last pseudocode line, "go to the next line"? A `print()` with nothing inside prints no characters — but still adds the newline. It is how a program presses the **Enter** key.
+
+## The star triangle
+
+The full translation, with the English plan kept as comments above each piece:
+
+```python
+max = 11
+
+# for each row number from 1 to 10
+for row_num in range(1, max):
+    # print a row of stars: as many stars as the row number, all on one line
+    for j in range(row_num):
+        print("*", end="")
+    # go to the next line
+    print()
+```
+
+Output
+
+```
+*
+**
+***
+****
+*****
+******
+*******
+********
+*********
+**********
+```
+
+English first, Python second — and the comments stay in the file, so anyone reading the code later (including future you) gets the English version for free.
+
+## Watch the numbers change
+
+The program runs too fast to see, but inside it, `row_num` and `j` are changing constantly. Being able to **work out those numbers by hand** is the skill that makes the next lab easy. Trace it on paper:
+
+| `row_num` | `j` goes through          | stars printed |
+|-----------|---------------------------|---------------|
+| 1         | 0                         | `*`           |
+| 2         | 0, 1                      | `**`          |
+| 3         | 0, 1, 2                   | `***`         |
+| 4         | 0, 1, 2, 3                | `****`        |
+
+See the pattern? `j` always starts at 0 and stops one short of `row_num` — that is `range` behaving exactly as it did in the prime program.
+
+Don't take the table's word for it. Make the program *show* you its numbers — print `j` instead of a star:
+
+```python
+max = 11
+
+for row_num in range(1, max):
+    for j in range(row_num):
+        print(j, end=" ")
+    print()
+```
+
+```
+0
+0 1
+0 1 2
+0 1 2 3
+0 1 2 3 4
+0 1 2 3 4 5
+0 1 2 3 4 5 6
+0 1 2 3 4 5 6 7
+0 1 2 3 4 5 6 7 8
+0 1 2 3 4 5 6 7 8 9
+```
+
+There they are — the invisible numbers, made visible. This trick works on any program: when you can't tell what a loop is doing, print its variables and look.
