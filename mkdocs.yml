@@ -21,7 +21,10 @@ nav:
       - 'lessons/lesson3.md'
       - 'Lesson 3 reading': 'lessons/lesson3_reading.md'
       - 'Lesson 3 homework': 'lessons/lesson3_homework.md'
-    - 'lessons/lesson4.md'
+    - 'Lesson 4':
+      - 'lessons/lesson4.md'
+      - 'Lesson 4 reading': 'lessons/lesson4_reading.md'
+      - 'Lesson 4 homework': 'lessons/lesson4_homework.md'
     - 'lessons/lesson5.md'
     - 'lessons/lesson6.md'
   # - Commands:
