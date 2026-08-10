@@ -39,7 +39,7 @@ Code
 
 ## Problem 2 — slope on the left
 
-Same triangle as the lesson, but leaning the other way: the slope runs from top-left down to bottom-right, and the straight edge is on the right.
+Same triangle as the lesson, but leaning the other way: the slope is on the left side, and the straight edge is on the right.
 
 Output
 
