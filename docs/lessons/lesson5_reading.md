@@ -1,6 +1,6 @@
 # Lesson 5 reading
 
-The lesson gave you the skeleton: a window, shapes, your own functions, arrow keys. This reading is the paint and wheels — the turtle functions that make things *look* good. Every one of them is just another function call, the shape you already know: a name, parentheses, maybe an input.
+The lesson gave you the skeleton: a window, a function of your own, and a square gliding across the screen. This reading is the paint and wheels — the turtle functions that make things *look* good. Every one of them is just another function call, the shape you already know: a name, parentheses, maybe an input.
 
 ## Make it look like a turtle
 
@@ -49,7 +49,7 @@ t.pendown()
 t.forward(100)   # draws again
 ```
 
-This is how you draw two shapes with a *gap* between them — and how you turn the Etch A Sketch driver from the lesson into a player that moves without scribbling: one `t.penup()` near the top of the program.
+This is how you draw two shapes with a *gap* between them — and it's exactly what the animation loop did every frame: pen down to draw the square, pen up to walk to the next spot without leaving a smear.
 
 ## Jumping to a spot: `goto` and the map of the window
 

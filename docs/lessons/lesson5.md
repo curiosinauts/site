@@ -1,6 +1,6 @@
 # Lesson 5
 
-Four lessons, and every program so far has talked to you in plain text. Today your program opens a **window**, draws pictures in it, and — by the end — lets you drive a turtle around the screen with the arrow keys. That is the first piece of a real game. And here's the secret: almost everything in this lesson is stuff you already know. There is exactly **one** big new idea, and it's the idea every game is built on.
+Four lessons, and every program so far has talked to you in plain text. Today your program opens a **window**, draws pictures in it, and — by the end — makes a square glide across the screen, redrawn 60 times every second. That is the same trick behind every movie and every game ever made. And almost everything in this lesson is stuff you already know. There are two genuinely new ideas: teaching Python a new word, and making pictures *move*.
 
 One note before we start: turtle opens a real window on your screen, so it needs Python installed on your computer — it won't work in the web editor. Run these as files with the Run button in VSCode.
 
@@ -10,7 +10,10 @@ Python doesn't come with drawing switched on. Instead it comes with **toolboxes*
 
 ```python
 import turtle
+from turtle import *
+import time
 
+# t is an object
 t = turtle.Turtle()
 
 turtle.done()
@@ -18,170 +21,155 @@ turtle.done()
 
 Run it. A window opens with a little arrow sitting in the middle. That arrow is the turtle.
 
-Three lines, three jobs. `import turtle` fetches the toolbox. `turtle.Turtle()` creates one turtle and stores it in the variable `t` — variables have held strings, numbers, booleans, and lists; now one holds a *turtle*. And `turtle.done()` at the very end keeps the window open — without it, the program finishes instantly and the window vanishes before you can blink.
+Two of those imports grab the turtle toolbox, in two different ways. `import turtle` fetches the toolbox and makes you say where things came from: `turtle.Turtle()`, `turtle.done()`. `from turtle import *` dumps the toolbox's contents straight onto the table, so later we can write `tracer(0)` instead of `turtle.tracer(0)`. And `import time` borrows a second toolbox — we'll need it to control *speed* at the end.
+
+`turtle.Turtle()` creates one turtle and stores it in the variable `t`. The comment says `t` is an **object** — a value that carries its own functions with it. You've already met one: lists are objects too, which is why you wrote `names.append(...)` in Lesson 4. The dot means "belongs to": `append` belongs to the list, `forward` belongs to the turtle.
+
+`turtle.done()` at the very end keeps the window open — without it, the program finishes instantly and the window vanishes before you can blink.
 
 ## You've been calling functions since Lesson 1
 
-`print("hello")` — a name, parentheses, and an input inside them. That shape is called a **function call**, and you've been making them all along: `print(...)`, `input(...)`, `int(...)`, `len(...)`, `range(...)`. The turtle just brings its own functions:
+`print("hello")` — a name, parentheses, and an input inside them. That shape is called a **function call**, and you've been making them all along: `print(...)`, `input(...)`, `int(...)`, `len(...)`, `range(...)`. The turtle just brings its own:
 
 ```python
+# forward is a function
 t.forward(100)
 t.left(90)
 ```
 
-`t.forward(100)` walks the turtle 100 steps in the direction it's facing, drawing a line as it goes. `t.left(90)` turns it 90 degrees to the left — the same degrees as in math class. Put those two lines between `t = ...` and `turtle.done()` and run it: a line, then a turn.
+`t.forward(100)` walks the turtle 100 steps in the direction it's facing, drawing a line as it goes — the input is a distance in **pixels**, the tiny dots your screen is made of. `t.left(90)` turns it 90 degrees to the left — the same degrees as in math class.
 
-## The square — the plain way and the smart way
-
-A square is four sides and four turns. The plain way:
+A square is four sides and four turns:
 
 ```python
-t.forward(100)
-t.left(90)
 t.forward(100)
 t.left(90)
 t.forward(100)
 t.left(90)
 t.forward(100)
 t.left(90)
+t.forward(100)
+t.left(90)
 ```
 
-Feel that copy-paste itch? It's the same feeling as the prime homework in Lesson 3 — *there has to be a smarter way* — and it has the same cure. The same two lines, repeated 4 times, is a loop:
-
-```python
-for i in range(4):
-    t.forward(100)
-    t.left(90)
-```
-
-And put the size in a variable, so one number controls the whole shape:
-
-```python
-size = 100
-
-for i in range(4):
-    t.forward(size)
-    t.left(90)
-```
-
-Change `size` to `50` and the whole square shrinks. One variable, total control — that's why we bother with variables.
-
-## Spot the pattern
-
-A triangle is 3 sides — but the turn is not 90, it's **120**:
-
-```python
-for i in range(3):
-    t.forward(100)
-    t.left(120)
-```
-
-Time for the Lesson 2 skill: run the experiment, look at the results, spot the pattern.
-
-| shape    | sides | turn | sides × turn |
-|----------|-------|------|--------------|
-| triangle | 3     | 120  | 360          |
-| square   | 4     | 90   | 360          |
-
-Always 360 — because by the time the turtle finishes the shape, it has spun **all the way around** exactly once, and all the way around is 360 degrees. So the turn is always `360 / sides`, and suddenly one loop draws *any* shape:
-
-```python
-sides = 6
-
-for i in range(sides):
-    t.forward(80)
-    t.left(360 / sides)
-```
-
-Try `sides = 5`, `8`, `12`. At `sides = 36` it's practically a circle. A human question — "how do I draw any shape?" — captured as one expression. That's programming.
+It works — but feel that copy-paste itch? It's the same feeling as the prime homework in Lesson 3: *there has to be a smarter way.* And what if we want two squares? Sixteen more lines?
 
 ## The big new idea: teach Python a new word
-
-Here's today's one genuinely new thing.
 
 You know how to name a *value*: `size = 100`. Now you'll name a *block of code*. That's what `def` does — it **defines** a function of your own, a brand-new word that Python didn't know before:
 
 ```python
-def draw_square():
-    for i in range(4):
-        t.forward(100)
-        t.left(90)
+# def -> define, rectangle <- name of a function, which means reusable code
+def rectangle(pixels):
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
 ```
 
 Run just that and... nothing happens. No square. That's not a bug — `def` only *teaches* Python the word. Nothing runs until you **call** it, exactly the way you call `print`:
 
 ```python
-draw_square()
+rectangle(150)
 ```
 
 *Now* the square appears. Define once, call whenever — and each call is one line, no matter how big the block inside is.
 
-One more step and it gets powerful. `print("hello")` takes an input. Your function can too — put a variable name inside the parentheses of the `def`:
+Look at the parentheses in the `def`. The reason we put `pixels` inside them is that we want to **pass a value in** — `print("hello")` takes an input, and now your function does too. `pixels` is a variable that gets its value **at call time**: call `rectangle(150)` and the block runs with `pixels = 150`; call `rectangle(50)` and it runs again with `pixels = 50`. One definition, any size of square.
+
+`def rectangle(pixels)` — that's you extending the Python language. `print` and `range` were written by programmers; now you're one of them.
+
+(Those four repeated forward-left pairs inside the `def`? That's a `for` loop waiting to happen — Lesson 3 style. Try tightening it yourself.)
+
+## How movies move
+
+Here's a secret about every screen you've ever watched: **nothing on it actually moves.** A movie is a stack of still pictures — *frames* — shown one after another, each slightly different from the last, so fast your eye is fooled. Games work exactly the same way: draw a frame, erase it, draw the next one a tiny bit different, about 60 times per second.
+
+So to make our square glide, the plan in English is:
 
 ```python
-def draw_square(size):
-    for i in range(4):
-        t.forward(size)
-        t.left(90)
-
-draw_square(50)
-draw_square(100)
-draw_square(150)
+# repeat, many times:
+#     draw the square
+#     show the finished frame
+#     wait a tiny moment
+#     move one pixel to the right
+#     erase everything
 ```
 
-Three calls, three nested squares. `size` is a variable that gets its value **at call time**: the first call runs the block with `size = 50`, the second with `size = 100`. It's the same trick the outer loop pulled in Lesson 3 — something else sets the variable, your block just uses it.
+Every line of that plan needs a tool, and here they are:
 
-`def draw_square(size)` — that's you extending the Python language. `print` and `range` were written by programmers; now you're one of them.
+- **`tracer(0)`** — normally the turtle draws slowly, line by line, so you can watch. Great for learning, useless for animation. `tracer(0)` turns automatic drawing **off**: nothing appears on screen at all until you say so. (Note it's bare `tracer`, no `t.` — it came from `from turtle import *`.)
+- **`update()`** — "show everything now." With tracer off, this is how a finished frame appears, all at once. Draw in secret, then reveal — that's a frame.
+- **`hideturtle()`** — hides the arrow itself, so you see only the drawing.
+- **`t.penup()` / `t.pendown()`** — lifts the pen so the turtle can move without drawing, and puts it back down to draw again.
+- **`t.goto(200, 200)`** — walks the turtle straight to a point. The window is a coordinate plane exactly like math class: **(0, 0) is the center**, x grows right, y grows up. (The reading has the full map.)
+- **`t.clear()`** — erases everything the turtle has drawn. This is the "erase the frame" step.
+- **`time.sleep(0.016)`** — from the `time` toolbox: pause for 0.016 seconds. Why that strange number? `0.016` is about **1/60 of a second** — pause that long between frames and you get 60 frames per second, the number real games chase.
 
-## Drive the turtle — your first game controls
+## The animation
 
-Why did games have to wait until today? Because every program you've written runs top to bottom and ends. A game is different: it **waits for the player**, and when the player presses a key, it runs *a function*. No functions, no games. Now you have functions.
+The whole plan, translated:
 
 ```python
 import turtle
+from turtle import *
+import time
 
 t = turtle.Turtle()
-screen = turtle.Screen()
 
-def go_up():
-    t.setheading(90)
-    t.forward(20)
+def rectangle(pixels):
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
+    t.forward(pixels)
+    t.left(90)
 
-def go_down():
-    t.setheading(270)
-    t.forward(20)
+# turn off automatic drawing -- we will say when to show a frame
+tracer(0)
 
-def go_left():
-    t.setheading(180)
-    t.forward(20)
+hideturtle()
 
-def go_right():
-    t.setheading(0)
-    t.forward(20)
+t.goto(200, 200)
 
-screen.onkey(go_up, "Up")
-screen.onkey(go_down, "Down")
-screen.onkey(go_left, "Left")
-screen.onkey(go_right, "Right")
+for i in range(150):
 
-screen.listen()
-screen.mainloop()
+    t.pendown()
+
+    # draw the square (invisibly -- tracer is off)
+    rectangle(150)
+
+    # show the finished frame
+    update()
+
+    t.penup()
+
+    # wait 1/60 of a second
+    time.sleep(0.016)
+
+    # move to the next spot: one pixel further right each frame
+    t.goto(200 + i, 200)
+
+    # erase, ready for the next frame
+    t.clear()
+
+turtle.done()
 ```
 
-Run it, click the window once, and drive with the arrow keys.
+Run it: the square drifts smoothly to the right. Nothing is actually moving — you're watching 150 still pictures.
 
-The new pieces, one at a time:
+Trace one lap of the loop, "watch the numbers change" style: pen down, `rectangle(150)` draws the square (invisibly — tracer is off), `update()` reveals the frame, pen up, sleep 1/60 of a second, `goto(200 + i, 200)` walks to the next spot, `clear()` wipes the canvas. Then the loop comes around and draws again.
 
-- **`turtle.Screen()`** grabs the window itself, so we can talk to it — stored in a variable like everything else.
-- **`t.setheading(90)`** points the turtle in an exact direction, compass-style: 0 is right, 90 is up, 180 is left, 270 is down. Then `forward(20)` takes one step that way.
-- **`screen.onkey(go_up, "Up")`** connects a key to a function. Look closely: it's `go_up`, **not** `go_up()`. With parentheses you'd be *calling* the function right now, once. Without them, you're handing the screen the recipe so *it* can cook every time the key is pressed. This is the one line in today's lesson everyone gets wrong once — parentheses call now, no parentheses hand it over for later.
-- **`screen.listen()`** tells the window to pay attention to the keyboard.
-- **`screen.mainloop()`** replaces `turtle.done()`: it's a loop that runs forever, waiting for keys and calling your functions. Your program no longer runs top to bottom — it sits in that loop until you close the window.
-
-Notice the pen is down the whole time, so driving draws — you've built an Etch A Sketch. (The reading shows you how to lift the pen, change its color, and more.)
+The motion hides in `200 + i`. First frame, `i` is 0, the square is at x = 200. Next frame, `i` is 1 — x = 201. Then 202, 203... `i` climbs by one each lap, exactly like every loop counter you've traced since Lesson 3, so each frame lands one pixel further right. **The loop variable is the animation.** Change `200 + i` to `200 + i * 2` and it moves twice as fast — because each frame jumps two pixels instead of one.
 
 ## The anatomy of every game
 
-Step back and look at what you built: a **window**, a **player** on the screen, **controls** that call functions, and a **loop** that waits for input. That is the skeleton of every game ever made — Snake, Minecraft, all of them. The rest of a game is just more of what you already do: variables for score, `if` for collisions, lists for enemies.
+Step back and look at what you built: a **window**, a **thing** on the screen, and a **loop** that draws, shows, waits, moves, and erases — 60 times a second. That loop has a name: the **game loop**, and it is the beating heart of every game ever made — Snake, Minecraft, all of them. The rest of a game is just more of what you already do: variables for score, `if` for collisions, lists for enemies.
 
-Next lessons we add those, one at a time. Bring your homework shapes — they're going in the game.
+One piece is missing: **the player**. Right now the loop decides where the square goes. Next lesson, the keyboard does — a key press will call a function *you* defined. Bring your homework shapes; they're going in.
