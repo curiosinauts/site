@@ -29,7 +29,10 @@ nav:
       - 'lessons/lesson5.md'
       - 'Lesson 5 reading': 'lessons/lesson5_reading.md'
       - 'Lesson 5 homework': 'lessons/lesson5_homework.md'
-    - 'lessons/lesson6.md'
+    - 'Lesson 6':
+      - 'lessons/lesson6.md'
+      - 'Lesson 6 reading': 'lessons/lesson6_reading.md'
+      - 'Lesson 6 homework': 'lessons/lesson6_homework.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
