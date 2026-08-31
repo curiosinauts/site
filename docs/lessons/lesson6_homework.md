@@ -1,6 +1,8 @@
 # Lesson 6 homework
 
-One game, grown four times. Start every problem from **the whole game** at the end of the lesson — by Problem 4 it has more controls, cleaner insides, random style, and a hazard that bites.
+In 1976 Atari released **Breakout**: a bar at the bottom of the screen, a bouncing ball, a wall of bricks. You're going to build it — starting this week with the bar the player controls, and you're going to build it **the way the lesson taught: as an object**, with attributes and behavior, stamped from a blueprint you write.
+
+One program, grown three times. Each problem is the last one plus one idea.
 
 Work like a programmer on each one:
 
@@ -11,85 +13,62 @@ Work like a programmer on each one:
 * Make as many mistakes as you like
 * Don't give up
 
-## Problem 1 — more keys
+## Problem 1 — draw the bar
 
-Give the player four more controls. Every new key is the same two steps: **define a function, hand it to `onkey`.**
+No class yet — first make the picture. One turtle, dressed up as a bar sitting near the bottom of the window.
 
-| key   | what it does                          |
-|-------|----------------------------------------|
-| `"u"` | lift the pen — drive without drawing   |
-| `"d"` | pen down — draw again                  |
-| `"c"` | erase the scribbles (`t.clear()`)      |
-| `"r"` | turn the player's pen red              |
-
-What you should see: driving works as before, and the four letter keys each do their job.
+What you should see: a wide blue bar, low on the screen, and no pen lines anywhere.
 
 Code
 
-* Each row of the table is a `def` with one line inside, plus one `screen.onkey(..., "u")` line — letter keys are lowercase, in quotes
-* The lesson's trap is waiting for you: `screen.onkey(pen_up, "u")` — hand over the recipe, no parentheses
-* Keep every `onkey` above `screen.listen()` and `screen.mainloop()`
+* Start with the usual: `import turtle`, a `turtle.Turtle()`, a `turtle.Screen()`, and `screen.mainloop()` at the bottom to keep the window open
+* `t.shape("square")` is a 20-by-20 square — and `t.turtlesize(1, 5)` stretches it: 1 tall, **5 wide**. That's the bar. (The reading used one input for overall size; two inputs stretch height and width separately)
+* `t.penup()` before `t.goto(0, -200)` — teleport to the bottom, no scribble on the way
+* `t.color("blue")` — dealer's choice on the color
 
-## Problem 2 — four movers become one
+## Problem 2 — blueprint the bar
 
-Look at `go_up`, `go_down`, `go_left`, `go_right`: identical except for one number. That's the copy-paste itch, and you know the cure — **one function, with the difference passed in**:
+Same picture, better insides. Wrap the bar in a **class**, exactly like `Snake`: the student's job is a `Bar` blueprint whose constructor takes a **color** and a **width**.
 
 ```python
-# define move(angle):
-#     point the turtle at angle
-#     step forward
-#     check the food
+class Bar:
+
+    # constructor
+    def __init__(self, color, width):
+        ...
+
+bar = Bar("blue", 5)
 ```
 
-Then each direction becomes a one-liner:
+What you should see: exactly the same bar as Problem 1. All the setup lines have moved *inside* the blueprint.
+
+Code
+
+* Store the attributes first, Snake-style: `self.color = color`, `self.width = width`
+* Then here's the new idea: the bar needs a turtle of its own, so **create one inside the constructor** — `self.t = turtle.Turtle()`. An attribute doesn't have to be a number or a string; the bar *has* a turtle, the way a person has a height
+* The rest of Problem 1's dress-up lines follow, aimed at `self.t` — and use the attributes you just stored: `self.t.color(color)`, `self.t.turtlesize(1, width)`
+* The payoff test: change `Bar("blue", 5)` to `Bar("red", 8)`. One line edited, whole bar changes — that's the constructor doing its job
+
+## Problem 3 — behavior: `move_left` and `move_right`
+
+An object has attributes *and behavior*. Give the bar its two moves, and wire them to the arrow keys:
 
 ```python
-def go_up():
-    move(90)
+def move_left(self):
+    ...
+
+def move_right(self):
+    ...
 ```
 
-What you should see: the game plays *exactly* the same as before. That's the point — same behavior, better insides.
+What you should see: the bar slides left and right with the arrow keys. (Click the window first so it hears the keyboard.)
 
 Code
 
-* `move(angle)` holds the `setheading` / `forward` / `check_food` lines — `angle` gets its value at call time, just like `pixels` did in Lesson 5
-* `go_up` calling `move` calling `check_food` — your functions are three layers deep now
-* The payoff test: make the player faster by changing `forward(20)` to `forward(40)`. How many places did you have to edit? Before this problem, it was four
+* Inside the class, under `__init__`, same indentation — these are **methods**, so `self` comes first in the parentheses
+* The insides are the lesson's movers aimed at the bar's own turtle: `self.t.setheading(180)` then `self.t.forward(30)` for left; heading `0` for right
+* The wiring is the lesson's recipe rule with a twist — you hand over a **method**: `screen.onkey(bar.move_left, "Left")` — no parentheses, and note it's `bar.`, not `Bar.`: the recipe belongs to the object you instantiated
+* `screen.listen()` before `screen.mainloop()`, as always
+* One magic number snuck in: the `30` the bar moves per press. You know what to do — `STEP = 30` at the top of the file, ALL CAPS promise, and both movers use it. Then tune it: a big `STEP` is a fast, jumpy bar; a small one is slow and smooth. That number is a difficulty knob, and now it has a name
 
-## Problem 3 — random flair
-
-Every time the food is eaten, it should respawn wearing a **random color**.
-
-What you should see: the dot jumps *and* changes color with every catch — green, then maybe purple, then maybe green again (random is allowed to repeat!).
-
-Code
-
-* Make a list near the top: `colors = ["red", "orange", "yellow", "green", "blue", "purple"]` — Lesson 4's tool
-* Inside `check_food`, next to the `goto`, one new line: `food.color(random.choice(colors))` — `choice` is in the reading
-* Bonus: also give it a random size with `food.turtlesize(random.randint(1, 3))` — now some food is big and easy, some small and tricky
-
-## Problem 4 — the hazard (stretch)
-
-Add a **third turtle**: a red square, sitting at a random spot. Touch it and the player gets thrown back to the center. You built the food from parts; now build its evil twin *unaided* — it's the exact same pattern.
-
-The English plan:
-
-```python
-# make a poison turtle: red, square, pen up, random spot
-# define check_poison:
-#     if the player is close to the poison:
-#         send the player back to (0, 0)
-# after every move, check the poison too
-```
-
-What you should see: chase the green dot, and if you clip the red square on the way, you're back at the center.
-
-Code
-
-* The poison setup is the food setup with different clothes: `turtle.Turtle()`, `shape("square")`, `color("red")`, `penup()`, a random `goto`
-* `check_poison` is `check_food` with a different `if`-body: `t.goto(0, 0)`
-* Call it from `move` (Problem 2 pays off — one place, not four)
-* Bonus: make the poison *taunt you* — after teleporting the player, move the poison to a new random spot too
-* Bonus: announce the hit with `t.write("ouch!", font=("Arial", 16, "bold"))` from the reading — where will the word appear, and when does it disappear?
-
-When all four run, count the turtles on your screen: a player, a food, a poison — three objects from one cookie cutter, steered by functions calling functions you defined. The only thing your game doesn't do is *count*. Next lesson it learns to keep score.
+When it runs, look at what's on the screen: an object stamped from a blueprint **you** wrote — attributes chosen at instantiation, behavior wired to keys. Now think about what Breakout still needs — a ball that flies and *bounces*. Flip back to Lesson 5's homework, Problem 4: you have already animated a bouncing square. A bar, a ball... you can see exactly where this is going.

@@ -1,71 +1,54 @@
 # Lesson 6
 
-Lesson 5 ended with a confession: the loop decided where the square went. You watched. Today that flips — **the keyboard calls your functions**, and by the end you'll have an actual game with an actual objective: drive your turtle around the screen and catch food that jumps to a new spot every time you eat it.
+Lesson 5 ended with a confession: the loop decided where the square went. You watched. Today that flips — **the keyboard calls your functions**, and you drive the turtle around the screen with the arrow keys. Along the way, three deeper fundamentals sneak in: giving names to numbers, the question of **where a variable lives**, and — biggest of all — building **your own kind of object**.
 
-Count the new ideas as we go. Almost everything today is a callback — the one genuinely new idea is small, sneaky, and sits inside a single pair of parentheses.
-
-## Why games needed `def` first
-
-Every program you wrote before Lesson 5 ran top to bottom and ended. A game is different: it **waits**, and when the player presses a key, some code has to run. "A named block of code, ready to run when called" — that's exactly what a function is. This is why `def` had to come before the game could start.
-
-The waiting itself is handled by the window. Grab it — the window is an object too, stored in a variable like everything else:
+## Borrowing someone else's code
 
 ```python
+# borrowing someone else's code
+import turtle
+```
+
+That's what `import` really is — code some other programmer wrote, tested, and shared, and you get it with one line. Every toolbox from Lesson 5 (`turtle`, `time`) was someone else's code.
+
+Now two objects come out of the toolbox:
+
+```python
+# instantiate (meaning create) an object
+# screen is a variable that refers to a special object
 screen = turtle.Screen()
+
+# scope of variable t is global
+t = turtle.Turtle()
 ```
 
-Now the three-step recipe for a key:
+**Instantiate** means *create* — `turtle.Turtle()` stamps out a brand-new turtle object, and `turtle.Screen()` hands you the window itself as an object, so you can talk to it. Two variables, two objects, and the dot tells you whose function you're calling — the same dot as `names.append` in Lesson 4.
+
+That comment on `t` — "scope of variable t is global" — is the day's deepest idea. Hold it; we come back to it after the driving works.
+
+## Constants — naming your numbers
+
+Which way is `setheading(90)`? You'd have to remember the compass: 0 right, 90 up, 180 left, 270 down. A number that means something — but doesn't *say* it — is called a **magic number**, and programmers get rid of them the same way we get rid of everything repetitive: name it.
 
 ```python
-def go_up():
-    t.setheading(90)
-    t.forward(20)
-
-screen.onkey(go_up, "Up")
-screen.listen()
-screen.mainloop()
+# constants
+UP = 90
+DOWN = 270
 ```
 
-- **`t.setheading(90)`** points the turtle in an exact compass direction: 0 is right, 90 is up, 180 is left, 270 is down. Then `forward(20)` takes one step that way.
-- **`screen.onkey(go_up, "Up")`** connects the up arrow key to your function.
-- **`screen.listen()`** tells the window to pay attention to the keyboard.
-- **`screen.mainloop()`** replaces `turtle.done()`: a loop that runs forever, waiting for keys and calling your functions.
-
-Run it, **click the window once** so it hears the keyboard, and tap the up arrow. The turtle steps. You're in.
-
-## The experiment: parentheses or no parentheses?
-
-Look again at the strangest thing on that page: `screen.onkey(go_up, "Up")` — `go_up` with **no parentheses**. Every function call you've ever made had them. Time for the Lesson 2 skill: run the experiment. Change the line to this and rerun:
-
-```python
-screen.onkey(go_up(), "Up")
-```
-
-Watch closely. The turtle moves **once, by itself, the instant the program starts** — and then the up arrow does *nothing*. No error. No traceback. Just a dead key.
-
-Here's what happened. Parentheses mean **call it now**. So `go_up()` ran immediately — that's the one ghost step — and what got handed to `onkey` was the *result* of the call, which is nothing at all. The key got connected to nothing.
-
-Without parentheses, `go_up` is the function *itself* — and it turns out a function is a **value**, just like `100` or `"scott"` or a list, and you can hand it to someone. `onkey(go_up, "Up")` hands the screen the recipe so *it* can cook, once per key press. Parentheses cook the meal now; no parentheses hand over the recipe.
-
-One more thing this experiment taught you, and it's bigger than turtle: the bug made **no noise**. Since Lesson 2 we've said error messages are hints — but the nastiest bugs never print one. The only way to catch those is what you just did: predict what should happen, run it, and notice the difference.
+Now `t.setheading(UP)` reads like English. `UP` is just a variable — same `=` as always — but the ALL CAPS is a **promise to whoever reads the code**: this value is set once and never changes. A never-changing variable is called a **constant**. Python doesn't enforce the promise; the capitals are programmers talking to programmers, like the comments from Lesson 3.
 
 ## Drive
 
-Fix the line back, then finish all four directions:
+The four movers, and the wiring that connects them to keys:
 
 ```python
-import turtle
-from turtle import *
-
-t = turtle.Turtle()
-screen = turtle.Screen()
-
 def go_up():
-    t.setheading(90)
+    t.setheading(UP)
     t.forward(20)
 
 def go_down():
-    t.setheading(270)
+    t.setheading(DOWN)
     t.forward(20)
 
 def go_left():
@@ -85,127 +68,166 @@ screen.listen()
 screen.mainloop()
 ```
 
-Drive around. The pen is down, so driving draws — you've built an Etch A Sketch. (Homework adds keys to lift the pen and wipe the screen.)
+- **`screen.onkey(go_up, "Up")`** connects the up arrow key to your function. Look closely: `go_up`, **no parentheses**. Parentheses would mean *call it now, once*; without them, the function itself is handed over — a function is a value, like `100` or a list — so the screen can call it every time the key is pressed. Hand over the recipe, don't cook the meal.
+- **`screen.listen()`** tells the window to pay attention to the keyboard.
+- **`screen.mainloop()`** replaces `turtle.done()`: a loop that runs forever, waiting for keys and calling your functions.
 
-And yes — those four functions are almost identical. Feel the itch? Same itch as the four forward-left pairs in Lesson 5. Hold that thought; it's homework Problem 2.
+Run it, **click the window once** so it hears the keyboard, and drive. The pen is down, so driving draws — you've built an Etch A Sketch. (Homework adds keys to lift the pen and wipe the screen.)
 
-## A second turtle
+Two itches to notice before moving on. `go_left` and `go_right` still use magic numbers — the constants job is half-finished. And the four movers are nearly identical — the Lesson 5 copy-paste itch again. Both are homework.
 
-A game needs something to chase. Watch this:
+## Scope — where a variable lives
 
-```python
-food = turtle.Turtle()
-food.shape("circle")
-food.color("green")
-food.penup()
-food.goto(100, 100)
-```
+Now the big one. Every mover uses `t` — but none of them *created* `t`. It was created at the top of the file, outside every function, and somehow the functions can see it. Why?
 
-Read the first line carefully — it's the same `turtle.Turtle()` from Lesson 5, called a *second time*. `Turtle()` is a cookie cutter: every call stamps out a brand-new turtle, with its own position, its own pen, its own everything. `t` and `food` are two separate objects, and the dot says whose function you're calling: `t.forward(20)` moves the player; `food.goto(100, 100)` moves the food. (You've seen this since Lesson 4 — every list has its *own* `append`.)
+Because every variable has a **scope**: the region of the program where it exists. A variable created at the top level of the file, outside all functions, is **global** — visible everywhere, including inside your functions. That's the comment from the start of the lesson: the scope of `t` is global, and that is exactly why `go_up` can use it.
 
-`food.penup()` matters: the food is going to teleport around the screen, and we don't want it drawing lines on the way.
-
-## Rolling dice — the `random` toolbox
-
-A game where the food always sits at (100, 100) is boring after one catch. We want the computer to *surprise us* — and there's a toolbox for that. Try it in the REPL:
-
-```pycon
->>> import random
->>> random.randint(-200, 200)
-37
->>> random.randint(-200, 200)
--144
->>> random.randint(-200, 200)
-12
-```
-
-Same call, three times, three different answers. `random.randint(-200, 200)` hands back a whole number between −200 and 200 — a different one each time, like rolling a 401-sided die. Notice it *hands back* a value: you've been using functions like that all along (`input` hands back a string, `len` hands back a count). `randint`'s specialty is that the value is a surprise.
-
-Two of them make a surprise *location*:
+A variable created *inside* a function is different. Run the experiment:
 
 ```python
-food.goto(random.randint(-200, 200), random.randint(-200, 200))
+age = 0
+
+def local_test():
+    # scope of age here is local
+    age = 15
+    print(age)
+
+print(age)
+local_test()
 ```
 
-The x is one roll, the y is another — the food lands somewhere new every time. (Add `import random` at the top with the other imports.)
+Predict first, then run. The output:
 
-## The catch
+```
+0
+15
+```
 
-Now the game rule. English first, as always:
+The first `print(age)` sees the global `age` — `0`. Then `local_test` runs, and `age = 15` inside it does **not** touch the global — it creates a brand-new, separate variable that is **local**: it exists only inside `local_test`, only while it runs. Same name, two different variables, two different scopes.
+
+Don't take my word for it — add one more probe after the call:
 
 ```python
-# after every move the player makes:
-#     if the player is close to the food:
-#         move the food to a new random spot
+print(age)
+local_test()
+print(age)
 ```
 
-"Close to" — how does a program measure that? The turtle can tell you:
-
-```pycon
->>> t.distance(food)
-141.42135623731
+```
+0
+15
+0
 ```
 
-`t.distance(food)` hands back the number of pixels between the two turtles. A number — and you know exactly what to do with a number: compare it. `t.distance(food) < 20` is a boolean, and a boolean feeds an `if`. It's the Lesson 2 pipeline, beat for beat: function → number → comparison → boolean → `if`.
+The global `age` is still `0`. The local one lived, printed, and vanished when the function ended. Think of it this way: globals are written on the classroom whiteboard — everyone can see them. Locals are scratch paper inside one function — private, and thrown away when the function returns.
 
-Translate the pseudocode:
+This is why your game can work at all: `t`, `screen`, `UP`, `DOWN` are on the whiteboard, so every key-press function shares the same turtle. And it's also a warning you'll meet again very soon — a *score* has to survive between key presses, and now you know the vocabulary to say what that means: the score must live in **global** scope, not local.
+
+## Blueprints — making your own kind of object
+
+One mystery is left over from the top of the lesson. `turtle.Turtle()` *instantiates* an object — but where did the idea of a "turtle" come from in the first place? Someone wrote a **blueprint** for it. Today you write your own.
+
+First, what an object even is:
 
 ```python
-def check_food():
-    if t.distance(food) < 20:
-        food.goto(random.randint(-200, 200), random.randint(-200, 200))
+# an object has attributes and behavior
+
+# e.g. person object
+
+# has attributes
+#     height
+#     eye_color
+#     hair_color
+
+# has behavior
+#     walk_on_your_feet
+#     you can swim with your arms
 ```
 
-All four movers need this check. And here's the flagship idea from Lesson 5 doing its job: imagine pasting that `if` into `go_up`, `go_down`, `go_left`, and `go_right` — four copies, and the day you decide 20 is too strict, you fix it in four places. Instead: **define once, call four times.** One new line at the bottom of each mover:
+**Attributes** are what an object *has* — a person has a height, an eye color. **Behavior** is what an object *does* — a person can walk, can swim. Check it against the turtle: it *has* a position, a heading, a pen color; it *does* `forward`, `left`, `goto`. Attributes and behavior. Every object you've met fits — even a list *has* its items and *does* `append`.
+
+The blueprint for a kind of object is called a **class**, and here's one of our own:
 
 ```python
-def go_up():
-    t.setheading(90)
-    t.forward(20)
-    check_food()
+# this is how you declare an object
+class Snake:
+
+    # constructor
+    def __init__(self, length, color, type) -> None:
+        self.length = length
+        self.color = color
+        self.type = type
+
+    def print_attributes(self):
+        print("length = ", self.length)
+        print("color = ", self.color)
+        print("type = ", self.type)
+
+    def did_i_eat_a_dot(self):
+        # if I had the dot, +1 on length
+        ...
 ```
 
-A function calling a function — your words are building on your words now, exactly like `print` and `range` build on words some other programmer defined.
+Read it piece by piece — every part is a familiar tool wearing a new hat:
 
-## The whole game
+- **`class Snake:`** starts the blueprint, the way `def` starts a function. Everything indented under it belongs to the class.
+- **`def __init__(...)`** is the **constructor** — the function that runs automatically at the moment of instantiation. Its job is to set up the new object's attributes. The weird name (two underscores on each side) is Python's signal that *it* calls this one, not you.
+- **`self`** means *this particular snake*. `self.length = length` takes the value passed in and stores it **on the object** — that's how a plain incoming value becomes an attribute the snake carries around forever.
+- **`print_attributes`** is behavior — a function that lives inside the class, so every snake knows how to do it. Functions attached to an object have a name: **methods**. `forward` and `append` were methods all along.
+- **`did_i_eat_a_dot`** is an empty promise for now — the `...` is a placeholder where code will go. Read that comment again, though: *"if I had the dot, +1 on length."* A snake that grows when it eats a dot... this class knows what game it wants to be.
+
+Now use the blueprint:
 
 ```python
+s = Snake(5, "red", "python")
+
+s.print_attributes()
+```
+
+```
+length =  5
+color =  red
+type =  python
+```
+
+`Snake(5, "red", "python")` is instantiation, exactly like `turtle.Turtle()` — and the three values travel into `__init__` as `length`, `color`, `type`, the same way `150` traveled into `rectangle(pixels)` in Lesson 5. Then `s.print_attributes()` is the dot doing what the dot has always done: calling a function that *belongs to the object* — except this time, **you** wrote the blueprint it came from.
+
+The ladder you've climbed: Lesson 5, you defined your own *function*. Today, your own *kind of object*, with attributes and behavior. `Turtle`, `Screen`, even lists and strings — all just classes somebody wrote. You're on the other side of the toolbox now.
+
+(One aside for the curious: the attribute named `type` quietly hides Python's built-in `type()` function from Lesson 2 while you're inside the class — names can collide, and the innermost one wins. Scope, again.)
+
+## The whole program
+
+```python
+# borrowing someone else's code
 import turtle
-from turtle import *
-import random
 
-t = turtle.Turtle()
+# instantiate (meaning create) an object
+# screen is a variable that refers to a special object
 screen = turtle.Screen()
 
-food = turtle.Turtle()
-food.shape("circle")
-food.color("green")
-food.penup()
-food.goto(random.randint(-200, 200), random.randint(-200, 200))
+# scope of variable t is global
+t = turtle.Turtle()
 
-def check_food():
-    if t.distance(food) < 20:
-        food.goto(random.randint(-200, 200), random.randint(-200, 200))
+# constants
+UP = 90
+DOWN = 270
 
 def go_up():
-    t.setheading(90)
+    t.setheading(UP)
     t.forward(20)
-    check_food()
 
 def go_down():
-    t.setheading(270)
+    t.setheading(DOWN)
     t.forward(20)
-    check_food()
 
 def go_left():
     t.setheading(180)
     t.forward(20)
-    check_food()
 
 def go_right():
     t.setheading(0)
     t.forward(20)
-    check_food()
 
 screen.onkey(go_up, "Up")
 screen.onkey(go_down, "Down")
@@ -215,17 +237,17 @@ screen.onkey(go_right, "Right")
 screen.listen()
 screen.mainloop()
 ```
-
-Run it. Click the window. Chase the dot. Every time you touch it, it jumps somewhere new. That's a game — one you can hand to a friend with no instructions, and they'll just *play* it.
 
 ## The anatomy, updated
 
-| game part  | you built it with                                   |
-|------------|-----------------------------------------------------|
-| window     | `turtle.Screen()`                                   |
-| player     | a `Turtle()` object                                 |
-| controls   | keys handing your functions to `onkey`              |
-| objective  | `random` + `distance` + `if`                        |
-| score      | **missing**                                         |
+| game part  | you built it with                        |
+|------------|-------------------------------------------|
+| window     | `turtle.Screen()`                         |
+| player     | a `Turtle()` object, global scope         |
+| controls   | keys handing your functions to `onkey`    |
+| objective  | **missing**                               |
+| score      | **missing**                               |
 
-That last row is next lesson — and it's harder than it looks. A score is a number that has to *survive between key presses*: `check_food` must add 1 to it and then remember the total after the function ends. That job belongs to variables, and it's the biggest job we've ever asked of them. Bring your homework game; the score goes into *yours*.
+Next lesson the game gets its objective: something to *chase* — a second turtle that jumps to a random spot every time you catch it; the reading has the tools (`random`, `distance`) waiting. After that comes score — and thanks to today, you already know the fundamental that makes score possible.
+
+The homework puts the blueprint idea straight to work on a classic: you'll build the player-controlled bar from **Breakout** — an object with a color, a width, and its own `move_left` and `move_right`. And as for `did_i_eat_a_dot` — a snake growing longer with every dot it eats? You've played that game too. Two retro games are now under construction, and both of them are made of blueprints.

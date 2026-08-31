@@ -1,6 +1,6 @@
 # Lesson 6 reading
 
-Two new toolboxes joined the team this week: `random`, and the pieces of turtle that measure and decorate. This reading is the rest of both — every one of them a function call, most of them **handing a value back** for you to use.
+The lesson gave you the driver — but a game needs something to chase, and the anatomy table has an empty "objective" row. This reading is the toolkit that fills it: a toolbox called `random` that lets the computer surprise you, and the turtle functions that measure and decorate. Every one of them is a function call, and most of them **hand a value back** for you to use — they're the ingredients for next lesson.
 
 ## `randint` — both ends included
 
@@ -27,11 +27,11 @@ Two new toolboxes joined the team this week: `random`, and the pieces of turtle 
 'red'
 ```
 
-Anything a list can hold, `choice` can pick: colors, names, sizes. You'll use this in the homework to give the food a new color every time it's eaten.
+Anything a list can hold, `choice` can pick: colors, names, sizes. Perfect for a game that wants variety — a chased dot that respawns wearing a random color, say.
 
 ## `distance` — to a turtle, or to a point
 
-The lesson used `t.distance(food)` — the gap between two turtles. But `distance` also takes a plain point:
+`t.distance(food)` hands back the number of pixels between two turtles — ask your turtle how far it is from another one. `distance` also takes a plain point:
 
 ```pycon
 >>> t.distance(0, 0)
