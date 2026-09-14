@@ -33,6 +33,11 @@ nav:
       - 'lessons/lesson6.md'
       - 'Lesson 6 reading': 'lessons/lesson6_reading.md'
       - 'Lesson 6 homework': 'lessons/lesson6_homework.md'
+    - 'Lesson 7':
+      - 'Lesson 7 reading': 'lessons/lesson7_reading.md'
+      - 'Lesson 7 homework': 'lessons/lesson7_homework.md'
+  - 'Reference':
+    - 'Python fundamentals index': 'python_fundamentals_index.md'
   # - Commands:
   #   - get:
   #     - 'commands/host/host-ip.md'
@@ -69,6 +74,8 @@ theme:
     - navigation.footer
     - content.code.annotate
     - content.tabs.link
+    - navigation.top
+    - toc.follow
   #   - navigation.tabs
   #   - navigation.tabs.sticky
 
