@@ -152,10 +152,10 @@ class Tree:
         self.color = color
 
 trees = [
-    Tree(0, 0, "green"),
-    Tree(500, 0, "green"),
+    Tree(0,    0,   "green"),
+    Tree(500,  0,   "red"),
     Tree(-900, 200, "brown"),
-    Tree(250, -250, "green"),
+    Tree(250, -250, "yellow")
 ]
 ```
 
@@ -166,6 +166,7 @@ And now redrawing is a `for` loop over the world, running every object through t
 ```python
 def redraw():
     t.clear()
+    t.clearstamps()
     for tree in trees:
         t.color(tree.color)
         t.goto(to_screen_x(tree.x), to_screen_y(tree.y))
@@ -173,49 +174,64 @@ def redraw():
     screen.update()
 ```
 
-Read those six lines and notice how much of your own history is in them. `clear` and `stamp` from Lesson 6. A `for` loop over a list from Lessons 3 and 4. Attributes from Lesson 6's classes. `goto` from Lesson 5. `update` from Lesson 5's animation. Two functions you wrote yourself, using Lesson 7's `return`.
+Read those few lines and notice how much of your own history is in them. `clear` and `stamp` from Lesson 6. A `for` loop over a list from Lessons 3 and 4. Attributes from Lesson 6's classes. `goto` from Lesson 5. `update` from Lesson 5's animation. Two functions you wrote yourself, using Lesson 7's `return`.
 
 Nothing in that function is new. The only new thing today is the **idea**: the world is stored in world coordinates, and gets translated to screen coordinates at the last possible moment, every time you draw.
 
 ## The whole thing
 
+Here it is with the comments we wrote together in the session. Read the comments as much as the code — they're the part you'll be glad of in three weeks.
+
 ```python
 import turtle
 
+# constants, meaning values that don't change
 WIDTH = 600
 HEIGHT = 600
 STEP = 50
 
 screen = turtle.Screen()
+# window size of 600x600
 screen.setup(WIDTH, HEIGHT)
+# turns off animiation. manuall call to update() is required for what's in memory to be rendered
 screen.tracer(0)
 
+# turtle variable t <--- what is it for???
 t = turtle.Turtle()
+# hide the turtle shape arrow or triagle
 t.hideturtle()
 t.penup()
+# in memory our turtle shape is a circle
 t.shape("circle")
 
+# declaring 2 global variables for camera x cord. and y cord.
 cam_x = 0
 cam_y = 0
 
 
+# declaring Tree object
 class Tree:
-
+    # constructor <- we pass in tree attributes
     def __init__(self, x, y, color):
         self.x = x
         self.y = y
         self.color = color
 
-
+# data structure
+# compose our list of tree
 trees = [
-    Tree(0, 0, "green"),
-    Tree(500, 0, "green"),
+    Tree(0,    0,   "green"),
+    Tree(500,  0,   "red"),
     Tree(-900, 200, "brown"),
-    Tree(250, -250, "green"),
+    Tree(250, -250, "yellow")
 ]
 
 
 def to_screen_x(world_x):
+    # 0 - 50
+    # debug by print to console
+    # f string declares the following is text and code
+    print(f"cam_x = {cam_x}, cam_y = {cam_y}")
     return world_x - cam_x
 
 
@@ -226,6 +242,7 @@ def to_screen_y(world_y):
 def redraw():
     t.clear()
     t.clearstamps()
+    # go through data structure. list of trees
     for tree in trees:
         t.color(tree.color)
         t.goto(to_screen_x(tree.x), to_screen_y(tree.y))
@@ -234,6 +251,7 @@ def redraw():
 
 
 def look_right():
+    # global means global variable
     global cam_x
     cam_x = cam_x + STEP
     redraw()
@@ -263,13 +281,57 @@ screen.onkey(look_up, "Up")
 screen.onkey(look_down, "Down")
 
 redraw()
+
+# listen means listen for events like key press
 screen.listen()
 screen.mainloop()
+
+print("do we ever get beyond main loop????")
 ```
 
 Click the window, hold an arrow key, and watch the trees slide past. Four trees in a world far wider than the window, and you can go look at any of them.
 
 That is a scrolling game world. You built it out of subtraction.
+
+One line in there is not part of the machine at all:
+
+```python
+print(f"cam_x = {cam_x}, cam_y = {cam_y}")
+```
+
+That's a **debug print**, parked inside `to_screen_x` so you can watch the camera move while you drive. It's the f-string from the Lesson 3 reading — the `f` lets you drop a variable straight into the text inside `{ }`.
+
+Notice it fires once per tree per redraw, so one key press prints four lines. That's not a bug, it's the cost of watching: `to_screen_x` really is called once for every tree, every frame. When the noise gets annoying, delete the line — it has done its job. Debug prints are scaffolding, and scaffolding comes down.
+
+## Two questions from the comments
+
+Two of those comments are questions, not explanations. Both are good ones, so let's answer them.
+
+### `# turtle variable t <--- what is it for???`
+
+Fair question — the program has four trees on screen, so why is there only **one** turtle?
+
+Because `t` isn't a tree. `t` is the **rubber stamp**.
+
+Look at what happens inside `redraw()`. The same single turtle walks to the first tree's spot, wears green, and stamps. Then it walks to the next spot, changes to red, stamps again. Four trees, one turtle, four trips. The turtle is invisible (`hideturtle`) and leaves no trail (`penup`), so all you ever see is the stamps it leaves behind.
+
+That's why it's `t.clearstamps()` at the top of `redraw()` — you're wiping last frame's prints before making this frame's.
+
+And this is exactly why the answer matters for your own project: if you gave every tree its own turtle, a forest of 500 trees would mean 500 turtle objects, and turtle would grind to a halt. One stamping turtle draws 500 trees just as happily as 4. The reading calls this "one turtle, many pictures," and it's the difference between a game that runs and a game that crawls.
+
+So: **`t` is a drawing tool, not a character.** Later, when you add a player, *that* gets its own turtle — because it's one thing that's genuinely always on screen.
+
+### `print("do we ever get beyond main loop????")`
+
+Run it and find out — that's the honest answer, and it's the right instinct to have written the line at all.
+
+Here's what's happening underneath. `screen.mainloop()` calls Tkinter's event loop, and that loop **blocks**: it sits there forever, watching for key presses and clicks, and does not hand control back to your program. Every line after it waits.
+
+So while the window is open, that `print` never runs. The program isn't stuck or broken — it's *listening*, which is what a program with a user interface does all day.
+
+But "forever" has an end. The loop stops when the window is destroyed — which is what closing the window does. **Close the turtle window and watch your terminal.** That's your experiment; go run it.
+
+This is worth understanding because it explains a rule you've been following since Lesson 6 without being told why: `mainloop()` must be the **last** statement. Not superstition — anything you put after it simply won't happen while the game is running.
 
 ## What you just learned
 
