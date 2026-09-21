@@ -36,6 +36,10 @@ nav:
     - 'Lesson 7':
       - 'Lesson 7 reading': 'lessons/lesson7_reading.md'
       - 'Lesson 7 homework': 'lessons/lesson7_homework.md'
+    - 'Lesson 8':
+      - 'lessons/lesson8.md'
+      - 'Lesson 8 reading': 'lessons/lesson8_reading.md'
+      - 'Lesson 8 homework': 'lessons/lesson8_homework.md'
   - 'Reference':
     - 'Python fundamentals index': 'python_fundamentals_index.md'
   # - Commands:
