@@ -40,6 +40,9 @@ nav:
       - 'lessons/lesson8.md'
       - 'Lesson 8 reading': 'lessons/lesson8_reading.md'
       - 'Lesson 8 homework': 'lessons/lesson8_homework.md'
+    - 'Lesson 9':
+      - 'lessons/lesson9.md'
+      - 'Lesson 9 answer key': 'lessons/lesson9_answers.md'
   - 'Reference':
     - 'Python fundamentals index': 'python_fundamentals_index.md'
   # - Commands:
